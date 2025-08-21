@@ -1,0 +1,14 @@
+inputSet:
+  name: Build_GabrielTCecconi_harness_prototype_1755803417634-pr-trigger-input-set
+  identifier: Build_GabrielTCecconi_harness_prototype_1755803417634prtriggerinputset
+  orgIdentifier: default
+  projectIdentifier: default_project
+  pipeline:
+    identifier: Build_GabrielTCecconi_harness_prototype_1755803417634
+    properties:
+      ci:
+        codebase:
+          build:
+            type: PR
+            spec:
+              number: <+trigger.prNumber>
