@@ -38,6 +38,9 @@ pipeline:
                       AWS_DEFAULT_REGION: us-east-1
                       ARTIFACT_BUCKET: hello-lambda-api-artifacts-cecconi
                       ARTIFACT_KEY: hello-lambda-api/builds/build.zip
+                      AWS_ACCESS_KEY_ID: <+secrets.getValue("AWS_ACCESS_KEY_ID")>
+                      AWS_SECRET_ACCESS_KEY: <+secrets.getValue("AWS_SECRET_ACCESS_KEY")>
+                      AWS_SESSION_TOKEN: <+secrets.getValue("AWS_SESSION_TOKEN")>
                     command: |
                       set -e
                       aws s3 ls "s3://${ARTIFACT_BUCKET}" >/dev/null
