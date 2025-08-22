@@ -1,11 +1,11 @@
 pipeline:
-  name: Build harness-prototype
+  name: hello-lambda-api
   identifier: Build_harness_prototype_1755833382578
   projectIdentifier: harnessprototype
   orgIdentifier: default
   stages:
     - stage:
-        name: Build
+        name: CI-Build-Test-Package
         identifier: Build
         type: CI
         spec:
@@ -13,12 +13,20 @@ pipeline:
           execution:
             steps:
               - step:
+                  name: Node Test
+                  identifier: node_test
                   type: Run
-                  name: Echo Welcome Message
-                  identifier: Echo_Welcome_Message
                   spec:
                     shell: Sh
-                    command: echo "Welcome to Harness CI"
+                    image: node:20
+                    command: |
+                      node -v
+                      npm --version
+                      apt-get update && apt-get install -y zip
+                      npm ci --prefix app
+                      npm test --prefix app
+                      (cd app && zip -r ../build.zip . -x "test/*")
+                      ls -lh build.zip
           platform:
             os: Linux
             arch: Amd64
