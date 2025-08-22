@@ -1,0 +1,10 @@
+{
+  "name": "hello-lambda",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "zip": "zip -r ../build.zip . -x \"test/*\""
+  },
+  "devDependencies": {}
+}
