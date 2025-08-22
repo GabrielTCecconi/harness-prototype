@@ -21,6 +21,6 @@ provider "aws" {
 
 
 data "aws_s3_object" "lambda_zip" {
-  bucket = var.artifact_bucket_name
+  bucket = var.bucket_name
   key    = var.artifact_key
 }
