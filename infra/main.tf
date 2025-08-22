@@ -8,8 +8,7 @@ terraform {
   }
   
   backend "s3" {
-    # troque pelos seus nomes EXISTENTES
-    bucket         = var.bucket_name        # bucket já existente
+    bucket         = "tf-backend-cecconi"
     key            = "hello-lambda-api/terraform.tfstate"
     region         = "us-east-1"
     encrypt        = true
