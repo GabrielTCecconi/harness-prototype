@@ -9,22 +9,12 @@ variable "region" {
 }
 
 # Artefato que o pipeline envia para o S3
-variable "artifact_bucket_name" {
+variable "bucket_name" {
   type    = string
-  default = null
-  validation {
-    condition     = var.create_artifact_bucket || (var.artifact_bucket_name != null && var.artifact_bucket_name != "")
-    error_message = "Defina artifact_bucket_name quando create_artifact_bucket = false."
-  }
+  default = "tf-backend-cecconi"  # mesmo bucket do backend
 }
 
 variable "artifact_key" {
   type    = string
-  default = "build.zip"
-}
-
-# Opcional: se já existir bucket, defina o nome e não crie um novo
-variable "create_artifact_bucket" {
-  type    = bool
-  default = true
+  default = "hello-lambda-api/builds/build.zip"
 }

@@ -27,10 +27,8 @@ resource "aws_lambda_function" "hello" {
   runtime       = "nodejs20.x"
   handler       = "index.handler"
 
-  s3_bucket = local.artifact_bucket_name
-  s3_key    = var.artifact_key
-
-  # força update quando o objeto muda (usa etag)
+  s3_bucket         = var.artifact_bucket_name
+  s3_key            = var.artifact_key
   s3_object_version = data.aws_s3_object.lambda_zip.version_id
 
   environment {
