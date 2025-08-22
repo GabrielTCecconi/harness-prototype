@@ -13,12 +13,44 @@ pipeline:
           execution:
             steps:
               - step:
+                  name: Node Test
+                  identifier: node_test
                   type: Run
-                  name: Echo Welcome Message
-                  identifier: Echo_Welcome_Message
                   spec:
                     shell: Sh
-                    command: echo "Welcome to Harness CI"
+                    image: node:20
+                    command: |
+                      node -v
+                      npm --version
+                      apt-get update && apt-get install -y zip
+                      npm ci --prefix app
+                      npm test --prefix app
+                      (cd app && zip -r ../build.zip . -x "test/*")
+                      ls -lh build.zip
+              - step:
+                  name: Upload to S3
+                  identifier: upload_s3
+                  type: Run
+                  spec:
+                    shell: Sh
+                    image: amazon/aws-cli:2.15.46
+                    connectorRef: account.aws_connector
+                    envVariables:
+                      AWS_DEFAULT_REGION: us-east-1
+                      ARTIFACT_BUCKET: hello-lambda-api-artifacts-cecconi
+                      ARTIFACT_KEY: build.zip
+                    command: |
+                      set -e
+                      # cria bucket idempotente se necessário e habilita versioning
+                      if ! aws s3 ls "s3://${ARTIFACT_BUCKET}" >/dev/null 2>&1; then
+                        aws s3 mb "s3://${ARTIFACT_BUCKET}"
+                        aws s3api put-bucket-versioning --bucket "${ARTIFACT_BUCKET}" --versioning-configuration Status=Enabled
+                      else
+                        # garante versioning ligado
+                        aws s3api put-bucket-versioning --bucket "${ARTIFACT_BUCKET}" --versioning-configuration Status=Enabled
+                      fi
+
+                      aws s3 cp build.zip "s3://${ARTIFACT_BUCKET}/${ARTIFACT_KEY}"
           platform:
             os: Linux
             arch: Amd64
