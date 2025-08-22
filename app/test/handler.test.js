@@ -6,5 +6,5 @@ test('returns hello world', async () => {
   const res = await handler({ queryStringParameters: {} });
   assert.equal(res.statusCode, 200);
   const body = JSON.parse(res.body);
-  assert.equal(body.message, 'Hello, world!');
+  assert.equal(body.message, 'Hello, World! Teste 2');
 });
