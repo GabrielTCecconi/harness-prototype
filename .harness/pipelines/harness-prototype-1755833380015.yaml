@@ -1,5 +1,5 @@
 pipeline:
-  name: Build harness-prototype
+  name: hello-lambda-api
   identifier: Build_harness_prototype_1755833382578
   projectIdentifier: harnessprototype
   orgIdentifier: default
@@ -38,19 +38,11 @@ pipeline:
                     envVariables:
                       AWS_DEFAULT_REGION: us-east-1
                       ARTIFACT_BUCKET: hello-lambda-api-artifacts-cecconi
-                      ARTIFACT_KEY: build.zip
+                      ARTIFACT_KEY: hello-lambda-api/builds/build.zip
                     command: |
                       set -e
-                      # cria bucket idempotente se necessário e habilita versioning
-                      if ! aws s3 ls "s3://${ARTIFACT_BUCKET}" >/dev/null 2>&1; then
-                        aws s3 mb "s3://${ARTIFACT_BUCKET}"
-                        aws s3api put-bucket-versioning --bucket "${ARTIFACT_BUCKET}" --versioning-configuration Status=Enabled
-                      else
-                        # garante versioning ligado
-                        aws s3api put-bucket-versioning --bucket "${ARTIFACT_BUCKET}" --versioning-configuration Status=Enabled
-                      fi
-
-                      aws s3 cp build.zip "s3://${ARTIFACT_BUCKET}/${ARTIFACT_KEY}"
+                      aws s3 ls "s3://${ARTIFACT_BUCKET}" >/dev/null
+                      aws s3 cp build.zip "s3://${ARTIFACT_BUCKET}/${ARTIFACT_KEY}" --only-show-errors
           platform:
             os: Linux
             arch: Amd64
